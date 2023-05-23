@@ -1,5 +1,5 @@
 {
-    "name": "@investment-dao/react-app",
+    "name": "@lotter-dap/react-app",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -17,6 +17,8 @@
         "next": "13.2.4",
         "react": "18.2.0",
         "react-dom": "18.2.0",
+        "redstone-evm-connector": "^2.1.26",
+        "tw-elements": "^1.0.0-beta1",
         "wagmi": "^0.12.2"
     },
     "devDependencies": {

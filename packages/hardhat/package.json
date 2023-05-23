@@ -1,5 +1,5 @@
 {
-    "name": "@celo-redstone-lottery-dapp/hardhat",
+    "name": "@stackshift-auction/hardhat",
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {

@@ -1,23 +1,23 @@
 {
-    "name": "investment-dao",
+    "name": "lottery-dapp",
     "version": "1.0.0",
     "description": "Custom Celo Composer project.",
     "private": true,
     "author": "Celo",
     "license": "MIT",
     "scripts": {
-        "react-app:dev": "yarn workspace @investment-dao/react-app dev",
-        "react-app:build": "yarn workspace @investment-dao/react-app build",
-        "react-app:start": "yarn workspace @investment-dao/react-app start",
-        "react-app:lint": "yarn workspace @investment-dao/react-app lint",
-        "hardhat:test": "yarn workspace @investment-dao/hardhat test",
-        "hardhat:test-local": "yarn workspace @investment-dao/hardhat test-local",
-        "hardhat:accounts": "yarn workspace @investment-dao/hardhat accounts",
-        "hardhat:devchain": "yarn workspace @investment-dao/hardhat devchain",
-        "hardhat:deploy": "yarn workspace @investment-dao/hardhat deploy",
-        "hardhat:deploy-reset-watch": "yarn workspace @investment-dao/hardhat deploy-reset-watch",
-        "hardhat:watch": "yarn workspace @investment-dao/hardhat watch",
-        "hardhat:fork-mainnet": "yarn workspace @investment-dao/hardhat fork-mainnet"
+        "react-app:dev": "yarn workspace @lottery-dapp/react-app dev",
+        "react-app:build": "yarn workspace @lottery-dapp/react-app build",
+        "react-app:start": "yarn workspace @lottery-dapp/react-app start",
+        "react-app:lint": "yarn workspace @lottery-dapp/react-app lint",
+        "hardhat:test": "yarn workspace @lottery-dapp/hardhat test",
+        "hardhat:test-local": "yarn workspace @lottery-dapp/hardhat test-local",
+        "hardhat:accounts": "yarn workspace @lottery-dapp/hardhat accounts",
+        "hardhat:devchain": "yarn workspace @lottery-dapp/hardhat devchain",
+        "hardhat:deploy": "yarn workspace @lottery-dapp/hardhat deploy",
+        "hardhat:deploy-reset-watch": "yarn workspace @lottery-dapp/hardhat deploy-reset-watch",
+        "hardhat:watch": "yarn workspace @lottery-dapp/hardhat watch",
+        "hardhat:fork-mainnet": "yarn workspace @lottery-dapp/hardhat fork-mainnet"
     },
     "repository": {
         "type": "git",
@@ -33,5 +33,8 @@
     "keywords": [
         "celo-composer",
         "celo"
-    ]
+    ],
+    "dependencies": {
+        "web3": "^1.9.0"
+    }
 }

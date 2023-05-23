@@ -1,7 +1,17 @@
-export default function Home() {
+import { useEffect, useState } from 'react'
+
+const Home = () => {
+
+  const [vendors, setVendors] = useState<UserData | undefined>(undefined)
+
+
+
   return (
-    <div>
-      <div className="h1">There you go... a canvas for your next Celo project!</div>
+    <div className="item-list">
+
     </div>
   )
 }
+
+export default Home
+
