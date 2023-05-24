@@ -11,13 +11,18 @@ contract DaoAnalyzer {
 
 
   mapping(uint => Proposal) public proposals;
+  mapping(address => bool) public isMember;
+
+  address[] public members;
 
   struct Proposal {
     address creator;
     string description;
-    uint yesVotes;
-    uint noVotes;
+    uint256 yesVotes;
+    uint256 noVotes;
     bool executed;
+    uint256 start;
+    uint256 end;
     mapping(address => Vote) votes;
   }
 
@@ -36,8 +41,18 @@ contract DaoAnalyzer {
     proposalThreshold = 100;
   }
 
+  function joinDao() public {
+    require(!isMember[msg.sender], "Already joined");
 
-  function createProposal(string memory _description) public {
+    members.push(msg.sender);
+  }
+
+  function getMembers() public view returns(address[] memory) {
+
+    return members;
+  }
+
+  function createProposal(string memory _description, uint256 _start, uint256 _end) public {
 
   // TODO: Must have certain token amount
 
@@ -45,7 +60,22 @@ contract DaoAnalyzer {
     Proposal storage proposal = proposals[proposalCount];
     proposal.creator = msg.sender;
     proposal.description = _description;
+    proposal.start = _start;
+    proposal.end = _end;
     emit ProposalCreated(proposalCount, msg.sender, _description);
+  }
+
+  function getProposal(uint256 _index) public view returns(address, string memory, uint, uint, bool) {
+
+    Proposal storage proposal = proposals[_index];
+
+    return (
+      proposal.creator,
+      proposal.description,
+      proposal.yesVotes,
+      proposal.noVotes,
+      proposal.executed
+    );
   }
 
 

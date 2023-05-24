@@ -25,7 +25,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   await deploy("DaoAnalyzer", {
     from: deployer,
-    args: [res.address,],
+    args: [res.address],
     log: true,
   });
 
