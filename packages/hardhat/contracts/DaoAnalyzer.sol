@@ -8,32 +8,39 @@ contract DaoAnalyzer {
   uint256 public proposalCount;
   uint256 public votingThreshold;
   uint256 public proposalThreshold;
+  Member[] public members;
+  Proposal[] public proposals;
+  Voter[] public voters;
 
+  mapping(address => Member) public membersMap;
+  mapping(address => mapping(uint256 => bool)) hasVoted;
 
-  mapping(uint => Proposal) public proposals;
-  mapping(address => bool) public isMember;
-
-  address[] public members;
+  struct Member {
+    address memberAddress;
+    uint256 tokenBalance;
+  }
 
   struct Proposal {
     address creator;
+    string title;
     string description;
     uint256 yesVotes;
     uint256 noVotes;
     bool executed;
     uint256 start;
     uint256 end;
-    mapping(address => Vote) votes;
   }
 
-  struct Vote {
+  struct Voter {
+    uint256 proposalIndex;
+    address voterAddress;
     bool inSupport;
-    bool voted;
   }
 
   event ProposalCreated(uint proposalId, address creator, string description);
   event Voted(uint proposalId, address voter, bool inSupport);
   event ProposalExecuted(uint proposalId, address executor);
+  event AddMember(address memberAddress, uint256 tokenBalance);
 
   constructor(address _tokenAddress) {
     token = IERC20(_tokenAddress);
@@ -42,40 +49,56 @@ contract DaoAnalyzer {
   }
 
   function joinDao() public {
-    require(!isMember[msg.sender], "Already joined");
+    require(msg.sender != address(0), "Invalid address");
 
-    members.push(msg.sender);
+    // Check if member already exists
+    require(membersMap[msg.sender].memberAddress == address(0), "Already a member");
+
+    // Add new member
+    Member storage member = membersMap[msg.sender];
+    member.memberAddress = msg.sender;
+    member.tokenBalance =  token.balanceOf(msg.sender);
+    members.push(Member(msg.sender, token.balanceOf(msg.sender)));
+
+    emit AddMember(msg.sender, token.balanceOf(msg.sender));
   }
 
-  function getMembers() public view returns(address[] memory) {
+  function createProposal(string memory _title, string memory _description, uint256 _start, uint256 _end) public {
 
-    return members;
-  }
+    require(_start > block.timestamp, "Proposal start time must be in the future");
+    require(_end > _start, "Proposal end time must be after start time");
+    require(membersMap[msg.sender].memberAddress == msg.sender, "You are not yet a member of this community");
+    require(token.balanceOf(msg.sender) >= proposalThreshold , "Did not meet proposal threshold");
 
-  function createProposal(string memory _description, uint256 _start, uint256 _end) public {
-
-  // TODO: Must have certain token amount
+    proposals.push(Proposal(msg.sender, _title, _description, 0, 0, false, _start, _end));
 
     proposalCount++;
-    Proposal storage proposal = proposals[proposalCount];
-    proposal.creator = msg.sender;
-    proposal.description = _description;
-    proposal.start = _start;
-    proposal.end = _end;
+
     emit ProposalCreated(proposalCount, msg.sender, _description);
   }
 
-  function getProposal(uint256 _index) public view returns(address, string memory, uint, uint, bool) {
+  function getProposal(uint256 _index) public view returns(address, string memory, string memory, uint, uint, bool, uint256, uint256) {
 
     Proposal storage proposal = proposals[_index];
 
     return (
       proposal.creator,
+      proposal.title,
       proposal.description,
       proposal.yesVotes,
       proposal.noVotes,
-      proposal.executed
+      proposal.executed,
+      proposal.start,
+      proposal.end
     );
+  }
+
+  function getAllProposals() public view returns(Proposal[] memory){
+    return proposals;
+  }
+
+  function getMembers() public view returns(Member[] memory){
+    return members;
   }
 
 
@@ -84,12 +107,7 @@ contract DaoAnalyzer {
 
     require(proposal.creator != address(0), "Proposal does not exist");
     require(!proposal.executed, "Proposal has already been executed");
-
-    Vote storage _vote = proposal.votes[msg.sender];
-    require(!_vote.voted, "Already voted");
-
-    _vote.voted = true;
-    _vote.inSupport = _inSupport;
+    require(!hasVoted[msg.sender][_proposalId], "You have already voted for this proposal");
 
     if (_inSupport) {
         proposal.yesVotes++;
@@ -97,6 +115,8 @@ contract DaoAnalyzer {
         proposal.noVotes++;
     }
 
+    voters.push(Voter(_proposalId, msg.sender, _inSupport));
+    hasVoted[msg.sender][_proposalId] = true;
     emit Voted(_proposalId, msg.sender, _inSupport);
   }
 
