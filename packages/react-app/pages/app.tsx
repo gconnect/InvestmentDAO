@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Proposals from '@/components/Proposals'
 
 const App = () => {
 
@@ -15,6 +16,9 @@ const App = () => {
         </div>
         <Image className="flex-1 w-16 md:w-32 lg:w-48" src={require('/assets/img/app-hero.png')}/>
       </div>
+
+      <Proposals />
+
     </>
   )
 }

@@ -61,7 +61,7 @@ export default function DashboardHeader() {
 
                 {/*<CreateAccountModal />*/}
 
-                <button onClick={() => router.push('/app')} className="customGradient text-white">Launch Dapp</button>
+                <button onClick={() => router.push('/app')} className="bg-gradient-to-r from-red-500 to-blue-500 text-white font-semibold py-2 px-4 rounded text-white mr-4">Launch Dapp</button>
 
                 <ConnectButton showBalance={{smallScreen: true, largeScreen: false}} />
                 </div>
